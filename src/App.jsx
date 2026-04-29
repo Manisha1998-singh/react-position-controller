@@ -45,51 +45,53 @@ const styles = {
 function App() {
   const pos = useRef({ x: 0, y: 0 });
   const boxRef = useRef(null);
+  const containerRef = useRef(null);
 
   const updatePosition = () => {
-    if (boxRef.current) {
-      boxRef.current.style.transform = `translate(-50%, -50%) translate(${pos.current.x + 44}px, ${pos.current.y}px)`;
+    if (boxRef.current && containerRef.current) {
+      let container = containerRef.current;
+      const maxX = container.offsetWidth / 2 - 50;
+      const maxY = container.offsetHeight / 2 - 50;
+      const minX = -maxX;
+      const minY = -maxY;
+      pos.current.x = Math.max(minX, Math.min(pos.current.x, maxX));
+      pos.current.y = Math.max(minY, Math.min(pos.current.y, maxY));
+
+      boxRef.current.style.transform = `translate(-50%, -50%) translate(${pos.current.x}px, ${pos.current.y}px)`;
     }
+  };
+  const move = (dx, dy) => {
+    pos.current.x += dx;
+    pos.current.y = dy;
+    updatePosition();
   };
 
   return (
-    <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
+    <div style={styles.container} ref={containerRef}>
       {/* Top */}
       <button
-        onClick={() => {
-          pos.current.y = Math.max(pos.current.y - 40, -200);
-          updatePosition();
-        }}
+        onClick={() => move(0, -40)}
         style={{ ...styles.buttonTop, ...styles.commonTopBottom }}>
         Top
       </button>
 
       {/* Bottom */}
       <button
-        onClick={() => {
-          pos.current.y = Math.min(pos.current.y + 20, 220);
-          updatePosition();
-        }}
+        onClick={() => move(0, 40)}
         style={{ ...styles.buttonBottom, ...styles.commonTopBottom }}>
         Down
       </button>
 
       {/* Left */}
       <button
-        onClick={() => {
-          pos.current.x = Math.max(pos.current.x - 20, -250);
-          updatePosition();
-        }}
+        onClick={() => move(-40, 0)}
         style={{ ...styles.buttonLeft, ...styles.commonLeftRight }}>
         Left
       </button>
 
       {/* Right */}
       <button
-        onClick={() => {
-          pos.current.x = Math.min(pos.current.x + 20, 180);
-          updatePosition();
-        }}
+        onClick={() => move(40, 0)}
         style={{ ...styles.buttonRight, ...styles.commonLeftRight }}>
         Right
       </button>
