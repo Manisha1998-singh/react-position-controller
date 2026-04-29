@@ -1,33 +1,43 @@
-import { useState } from "react";
+import { useRef } from "react";
 
 function App() {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const pos = useRef({ x: 0, y: 0 });
+  const boxRef = useRef(null);
+
+  const updatePosition = () => {
+    if (boxRef.current) {
+      boxRef.current.style.transform = `translate(-50%, -50%) translate(${pos.current.x + 44}px, ${pos.current.y}px)`;
+    }
+  };
 
   return (
     <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
       {/* Top */}
       <button
-        onClick={() =>
-          setPos((prev) => ({ ...prev, y: Math.max(prev.y - 40, -200) }))
-        }
+        onClick={() => {
+          pos.current.y = Math.max(pos.current.y - 40, -200);
+          updatePosition();
+        }}
         style={{ position: "absolute", top: 0, width: "100%", height: 30 }}>
         Top
       </button>
 
       {/* Bottom */}
       <button
-        onClick={() =>
-          setPos((prev) => ({ ...prev, y: Math.min(prev.y + 20, 220) }))
-        }
+        onClick={() => {
+          pos.current.y = Math.min(pos.current.y + 20, 220);
+          updatePosition();
+        }}
         style={{ position: "absolute", bottom: 0, width: "100%", height: 30 }}>
         Down
       </button>
 
       {/* Left */}
       <button
-        onClick={() =>
-          setPos((prev) => ({ ...prev, x: Math.max(prev.x - 20, -250) }))
-        }
+        onClick={() => {
+          pos.current.x = Math.max(pos.current.x - 20, -250);
+          updatePosition();
+        }}
         style={{
           position: "absolute",
           left: 0,
@@ -41,9 +51,10 @@ function App() {
 
       {/* Right */}
       <button
-        onClick={() =>
-          setPos((prev) => ({ ...prev, x: Math.min(prev.x + 20, 180) }))
-        }
+        onClick={() => {
+          pos.current.x = Math.min(pos.current.x + 20, 180);
+          updatePosition();
+        }}
         style={{
           position: "absolute",
           right: 0,
@@ -58,6 +69,7 @@ function App() {
 
       {/* Box */}
       <div
+        ref={boxRef}
         style={{
           height: 100,
           width: 100,
@@ -66,7 +78,7 @@ function App() {
           left: "50%",
           top: "50%",
 
-          transform: `translate(-50%, -50%) translate(${pos.x + 44}px, ${pos.y}px)`,
+          transform: "translate(-50%, -50%)",
         }}
       />
     </div>
