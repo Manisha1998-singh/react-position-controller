@@ -1,5 +1,47 @@
 import { useRef } from "react";
 
+const styles = {
+  container: {
+    position: "relative",
+    height: "100vh",
+    width: "100vw",
+  },
+  commonTopBottom: {
+    position: "absolute",
+    width: "100%",
+    height: 30,
+  },
+  buttonTop: {
+    top: 0,
+  },
+  buttonBottom: {
+    bottom: 0,
+  },
+  commonLeftRight: {
+    top: "30px",
+    width: "40px",
+    zIndex: 1,
+    height: "calc(100% - 60px)",
+  },
+  buttonLeft: {
+    position: "absolute",
+    left: 0,
+  },
+  buttonRight: {
+    position: "absolute",
+    right: 0,
+  },
+  box: {
+    height: 100,
+    width: 100,
+    background: "red",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
 function App() {
   const pos = useRef({ x: 0, y: 0 });
   const boxRef = useRef(null);
@@ -18,7 +60,7 @@ function App() {
           pos.current.y = Math.max(pos.current.y - 40, -200);
           updatePosition();
         }}
-        style={{ position: "absolute", top: 0, width: "100%", height: 30 }}>
+        style={{ ...styles.buttonTop, ...styles.commonTopBottom }}>
         Top
       </button>
 
@@ -28,7 +70,7 @@ function App() {
           pos.current.y = Math.min(pos.current.y + 20, 220);
           updatePosition();
         }}
-        style={{ position: "absolute", bottom: 0, width: "100%", height: 30 }}>
+        style={{ ...styles.buttonBottom, ...styles.commonTopBottom }}>
         Down
       </button>
 
@@ -38,14 +80,7 @@ function App() {
           pos.current.x = Math.max(pos.current.x - 20, -250);
           updatePosition();
         }}
-        style={{
-          position: "absolute",
-          left: 0,
-          top: "30px",
-          width: "40px",
-          zIndex: "1",
-          height: "calc(100%  - 60px)",
-        }}>
+        style={{ ...styles.buttonLeft, ...styles.commonLeftRight }}>
         Left
       </button>
 
@@ -55,32 +90,12 @@ function App() {
           pos.current.x = Math.min(pos.current.x + 20, 180);
           updatePosition();
         }}
-        style={{
-          position: "absolute",
-          right: 0,
-
-          top: "30px",
-          width: "44px",
-          zIndex: "1",
-          height: "calc(100%  - 60px)",
-        }}>
+        style={{ ...styles.buttonRight, ...styles.commonLeftRight }}>
         Right
       </button>
 
       {/* Box */}
-      <div
-        ref={boxRef}
-        style={{
-          height: 100,
-          width: 100,
-          background: "red",
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-
-          transform: "translate(-50%, -50%)",
-        }}
-      />
+      <div ref={boxRef} style={styles.box} />
     </div>
   );
 }
